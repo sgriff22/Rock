@@ -23,8 +23,13 @@ export const ApplicationViews = () => {
     },
   ]);
 
-  const fetchRocksFromAPI = async () => {
-    const response = await fetch("http://localhost:8000/rocks", {
+  const fetchRocksFromAPI = async (showAll) => {
+    let url = "http://localhost:8000/rocks"
+
+    if(showAll !== true) {
+      url = "http://localhost:8000/rocks?owner=current"
+    }
+    const response = await fetch(url, {
       headers: {
         Authorization: `Token ${
           JSON.parse(localStorage.getItem("rock_token")).token
@@ -45,7 +50,11 @@ export const ApplicationViews = () => {
           <Route
             path="/allrocks"
             element={
-              <RockList rocks={rocksState} fetchRocks={fetchRocksFromAPI} />
+              <RockList
+                rocks={rocksState}
+                fetchRocks={fetchRocksFromAPI}
+                showAll={true}
+              />
             }
           />
           <Route
@@ -55,7 +64,11 @@ export const ApplicationViews = () => {
           <Route
             path="/mine"
             element={
-              <RockList rocks={rocksState} fetchRocks={fetchRocksFromAPI} />
+              <RockList
+                rocks={rocksState}
+                fetchRocks={fetchRocksFromAPI}
+                showAll={false}
+              />
             }
           />
         </Route>
